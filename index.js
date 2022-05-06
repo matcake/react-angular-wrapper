@@ -11,15 +11,15 @@ export const reactAngularWrapper = (Class, bindingNames = [], injectNames = []) 
         ...injectNames,
         class {
             isMounted = false; // Define if React component is mounted
-            props = {}; // Assign empty props
+            injectedProps = {}; // Init empty injected props
+            props = {}; // Init empty props
 
             constructor(element, ...injectedProps) {
                 this.root = createRoot(element[0]); // Component's DOM element
-                this.injectedProps = {};
-
-                injectNames.forEach((name, i) => {
-                    this.injectedProps[name] = injectedProps[i];
-                });
+                this.injectedProps = injectNames.reduce((prev, curr, index) => {
+                    prev[curr] = injectedProps[index];
+                    return prev;
+                }, {});
             }
 
             /* [React] Mount component */
